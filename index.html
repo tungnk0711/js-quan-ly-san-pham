@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products CRUD</title>
+    <style>
+        #editProduct {
+            display: none;
+        }
+    </style>
+</head>
+
+<body onload="fetchAll(products, tblProducts);">
+
+<h3>Add New Product</h3>
+<div>
+    <input type="text" id="txtProduct" placeholder="New Product">
+    <input type="submit" value="Add" onclick="addProduct(products,this.parentElement.children[0]);">
+</div>
+
+<h3>Display All Product</h3>
+<p id="countProduct"></p>
+<table>
+    <tbody>
+    <tr>
+        <th>Product Name</th>
+    </tr>
+    </tbody>
+    <tbody id="tblProducts">
+    </tbody>
+</table>
+
+<div id="editProduct">
+    <h3>Edit Product</h3>
+    <div>
+        <input type="text" id="txtEditProduct">
+        <input type="hidden" id="hidIndex">
+        <input type="submit" value="Edit"
+               onclick="editProduct(this.parentElement.children[0], this.parentElement.children[1].value)">
+    </div>
+</div>
+
+<script>
+
+    let products = ['Sony Xperia', 'Samsung Galaxy', 'Nokia 6', 'Xiaomi Redmi Note 4', 'Apple iPhone 6S', 'Xiaomi Mi 5s Plus', 'Apple iPhone 8 Plus', 'Fujitsu F-04E', 'Oppo A71'];
+    let tblProducts = document.getElementById("tblProducts");
+
+    function fetchAll(listProductParam, tblProductsParam) {
+        let data = '';
+        if (listProductParam.length > 0) {
+            for (let i = 0; i < listProductParam.length; i++) {
+                data += '<tr>';
+                data += '<td>' + listProductParam[i] + '</td>';
+                data += '<td><button onclick="editProductForm(' + i + ')">Edit</button></td>';
+                data += '<td><button onclick="deleteProduct(' + i + ')">Delete</button></td>';
+                data += '</tr>';
+            }
+        }
+        tblProductsParam.innerHTML = data;
+        let countProduct = document.getElementById("countProduct");
+        countProduct.innerText = listProductParam.length.toString()+ " products";
+    }
+
+    function addProduct(listProductParam, product) {
+        if (product != null) {
+            listProductParam.push(product.value);
+        }
+        fetchAll(products, tblProducts);
+    }
+
+    function editProductForm(index) {
+        document.getElementById('editProduct').style.display = 'block';
+        let txtEditProduct = document.getElementById("txtEditProduct");
+        txtEditProduct.value = products[index];
+        let hiddenIndex = document.getElementById("hidIndex");
+        hiddenIndex.value = index;
+    }
+
+    function editProduct(product, index) {
+        if (product != "" && index != "") {
+            products[Number(index)] = product.value;
+        }
+        fetchAll(products, tblProducts);
+    }
+
+    function deleteProduct(index) {
+        if (index != "") {
+            products.splice(index, 1);
+        }
+        fetchAll(products, tblProducts);
+    }
+
+
+</script>
+
+</body>
+</html>
